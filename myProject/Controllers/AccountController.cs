@@ -25,7 +25,7 @@ namespace myProject.Controllers
                                     RoleManager<IdentityRole> roleService,
                                     IDataService<Profile> serviceProf,
                                     IDataService<Address> serviceAddress,
-                                    IDataService<IdentityUser> service
+                                    IDataService<IdentityUser> service)
         {
             _userManagerService = managerService;
             _signInManagerService = signinService;
@@ -137,31 +137,57 @@ namespace myProject.Controllers
 
             AccountUpdateProfileViewModel vm = new AccountUpdateProfileViewModel
             {
+                UserId = user.Id,
+                Username = user.UserName,
                 FirstName = prof.FirstName,
                 LastName = prof.LastName,
-                StreetAddress = address.StreetAddress
-
+                StreetAddress = address.StreetAddress,
+                City = address.City,
+                State = address.State,
+                PostCode = address.PostCode
             };
 
             return View(vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateProfile(AddressAddAddressViewModel vm)
+        public async Task<IActionResult> UpdateProfile(AccountUpdateProfileViewModel vm)
         {
             if (ModelState.IsValid)
             {
+                IdentityUser user = new IdentityUser
+                {
+                    UserName = vm.Username
+                };
+                Profile prof = new Profile
+                {
+                    FirstName = vm.FirstName,
+                    LastName = vm.LastName
+                };
+
                 Address address = new Address
                 {
-                    AddressID = vm.AddressID,
                     StreetAddress = vm.StreetAddress,
                     City = vm.City,
                     State = vm.State,
                     PostCode = vm.PostCode
                 };
 
-                _dataServiceAddress.Create(address);
-                return RedirectToAction("Index", "Home");
+                IdentityResult result = await _userManagerService.CreateAsync(user, vm.Password);
+
+                if (result.Succeeded)
+                {
+                    _dataServiceProf.Create(prof);
+                    _dataServiceAddress.Create(address);
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
             }
             //if invalid
             return View(vm);
