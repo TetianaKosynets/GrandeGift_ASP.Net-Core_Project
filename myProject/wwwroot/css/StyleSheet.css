@@ -1,0 +1,54 @@
+﻿body {
+    font-family: 'Chaparral Pro';
+}
+
+.navText {
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.text {
+    font-size: 21px;
+}
+
+#mainNav {
+    background-color: #ff8348;
+}
+
+#b_search {
+    background-color: #ffffff;
+    border-color: lightgrey;
+}
+
+.headers {
+    text-align: center;
+}
+
+.carous {
+    margin-top:120px;
+}
+
+#carouselExampleControls {
+    background-color: #eeeeee;
+}
+
+footer {
+    background-color: #ff8348;
+}
+
+.search {
+    width:72px;
+}
+
+img{
+    max-height: 400px;
+}
+
+.card {
+ height:580px;
+}
+
+@media (min-width: 992px) {
+    body {
+    }
+}
