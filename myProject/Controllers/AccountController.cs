@@ -12,7 +12,6 @@ namespace myProject.Controllers
 {
     public class AccountController : Controller
     {
-        private IDataService<IdentityUser> _dataService;
         private IDataService<Profile> _dataServiceProf;
         private IDataService<Address> _dataServiceAddress;
         private SignInManager<IdentityUser> _signInManagerService;
@@ -24,8 +23,7 @@ namespace myProject.Controllers
                                     SignInManager<IdentityUser> signinService,
                                     RoleManager<IdentityRole> roleService,
                                     IDataService<Profile> serviceProf,
-                                    IDataService<Address> serviceAddress,
-                                    IDataService<IdentityUser> service)
+                                    IDataService<Address> serviceAddress)
         {
             _userManagerService = managerService;
             _signInManagerService = signinService;
@@ -33,8 +31,6 @@ namespace myProject.Controllers
 
             _dataServiceProf = serviceProf;
             _dataServiceAddress = serviceAddress;
-
-            _dataService = service;
         }
 
         [HttpGet]
@@ -129,16 +125,20 @@ namespace myProject.Controllers
         }
 
         [HttpGet]
-        public IActionResult UpdateProfile(string id)
+        public IActionResult UpdateProfile()
         {
-            IdentityUser user = _dataService.GetSingle(p => p.Id == id);
+            //Current UserName
+            string name = User.Identity.Name;
+            //Current UserId
+            string id = _userManagerService.GetUserId(User);
+
             Profile prof = _dataServiceProf.GetSingle(s => s.UserID == id);
             Address address = _dataServiceAddress.GetSingle(a => a.UserID == id);
 
             AccountUpdateProfileViewModel vm = new AccountUpdateProfileViewModel
             {
-                UserId = user.Id,
-                Username = user.UserName,
+                UserId = id,
+                Username = name,
                 FirstName = prof.FirstName,
                 LastName = prof.LastName,
                 StreetAddress = address.StreetAddress,
@@ -151,43 +151,29 @@ namespace myProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateProfile(AccountUpdateProfileViewModel vm)
+        public IActionResult UpdateProfile(AccountUpdateProfileViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                IdentityUser user = new IdentityUser
-                {
-                    UserName = vm.Username
-                };
-                Profile prof = new Profile
-                {
-                    FirstName = vm.FirstName,
-                    LastName = vm.LastName
-                };
+                //Current UserName
+                string name = User.Identity.Name;
+                //Current UserID
 
-                Address address = new Address
-                {
-                    StreetAddress = vm.StreetAddress,
-                    City = vm.City,
-                    State = vm.State,
-                    PostCode = vm.PostCode
-                };
+                string id = _userManagerService.GetUserId(User);
 
-                IdentityResult result = await _userManagerService.CreateAsync(user, vm.Password);
+                Profile prof = _dataServiceProf.GetSingle(s => s.UserID == id);
+                Address address = _dataServiceAddress.GetSingle(a => a.UserID == id);
 
-                if (result.Succeeded)
-                {
-                    _dataServiceProf.Create(prof);
-                    _dataServiceAddress.Create(address);
+                prof.FirstName = vm.FirstName;
+                prof.LastName = vm.LastName;
+                address.StreetAddress = vm.StreetAddress;
+                address.City = vm.City;
+                address.State = vm.State;
+                address.PostCode = vm.PostCode;
+
+                    _dataServiceProf.Update(prof);
+                    _dataServiceAddress.Update(address);
                     return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
-                }
             }
             //if invalid
             return View(vm);

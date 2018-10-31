@@ -7,6 +7,7 @@ namespace myProject.Services
 {
     public interface IDataService<T>
     {
+        //bool Exist(Func<T, bool> predicate);
         IEnumerable<T> GetAll();
         void Create(T entity);
         T GetSingle(Func<T, bool> predicate);

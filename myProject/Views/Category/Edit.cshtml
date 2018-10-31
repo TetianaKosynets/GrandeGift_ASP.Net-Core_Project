@@ -1,0 +1,18 @@
+﻿@model CategoryEditViewModel
+
+<h2>Edit</h2>
+
+<form asp-action="Edit" asp-controller="Category" method="post">
+    <div>
+        <input asp-for="CategoryId" hidden="hidden" />
+    </div>
+
+    <div>
+        <label asp-for="CategoryName"></label>
+        <input asp-for="CategoryName" />
+    </div>
+
+    <div>
+        <input type="submit" value="Save Changes" />
+    </div>
+</form>

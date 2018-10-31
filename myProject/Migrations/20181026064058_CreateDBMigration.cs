@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace myProject.Migrations
 {
-    public partial class identityMigration : Migration
+    public partial class CreateDBMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -54,12 +54,28 @@ namespace myProject.Migrations
                 {
                     AddressID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AddressDetails = table.Column<string>(nullable: false),
+                    City = table.Column<string>(nullable: true),
+                    PostCode = table.Column<string>(nullable: true),
+                    State = table.Column<string>(nullable: true),
+                    StreetAddress = table.Column<string>(nullable: false),
                     UserID = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TblAddress", x => x.AddressID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TblCategory",
+                columns: table => new
+                {
+                    CategoryId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CategoryName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TblCategory", x => x.CategoryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -183,6 +199,28 @@ namespace myProject.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Hamper",
+                columns: table => new
+                {
+                    HamperId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CategoryId = table.Column<int>(nullable: false),
+                    Details = table.Column<string>(nullable: true),
+                    HamperName = table.Column<string>(nullable: true),
+                    Price = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Hamper", x => x.HamperId);
+                    table.ForeignKey(
+                        name: "FK_Hamper_TblCategory_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "TblCategory",
+                        principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -221,6 +259,11 @@ namespace myProject.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Hamper_CategoryId",
+                table: "Hamper",
+                column: "CategoryId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -241,6 +284,9 @@ namespace myProject.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Hamper");
+
+            migrationBuilder.DropTable(
                 name: "TblAddress");
 
             migrationBuilder.DropTable(
@@ -251,6 +297,9 @@ namespace myProject.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "TblCategory");
         }
     }
 }

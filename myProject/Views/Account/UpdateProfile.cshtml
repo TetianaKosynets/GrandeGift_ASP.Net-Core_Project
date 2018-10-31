@@ -21,14 +21,6 @@
                     <span asp-validation-for="Username" class="text-danger" />
                 </div>
                 <div class="mt-2">
-                    <input asp-for="Password" class="form-control" placeholder="Password" type="password" />
-                    <span asp-validation-for="Password" class="text-danger" />
-                </div>
-                <div class="mt-2">
-                    <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" type="password" />
-                    <span asp-validation-for="ConfirmPassword" class="text-danger" />
-                </div>
-                <div class="mt-2">
                     <input asp-for="FirstName" class="form-control" placeholder="First Name" />
                     <span asp-validation-for="FirstName" class="text-danger" />
                 </div>
@@ -51,10 +43,6 @@
                 <div class="mt-2">
                     <input asp-for="PostCode" class="form-control" placeholder="Post Code" />
                     <span asp-validation-for="PostCode" class="text-danger" />
-                </div>
-                <div class="mt-2">
-                    @Html.ActionLink("EditAddress", "Account", "Add new Address");
-                    @Html.ActionLink("AddAddress", "Account", "Add new Address");
                 </div>
                 <div class="mt-2">
                     <input class="btn" type="submit" value="Save Changes" />

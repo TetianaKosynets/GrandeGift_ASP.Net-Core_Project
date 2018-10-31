@@ -11,10 +11,14 @@ namespace myProject.Controllers
 {
     public class CategoryController : Controller
     {
-        private IDataService<Category> _dataService;
-        public CategoryController(IDataService<Category> dataService)
+        private IDataService<Category> _categoryDataService;
+        private IDataService<Hamper> _hamperDataService;
+
+        public CategoryController(IDataService<Category>dataServiceCategory,
+                                  IDataService<Hamper> dataServiceHamper)
         {
-            _dataService = dataService;
+            _categoryDataService = dataServiceCategory;
+            _hamperDataService = dataServiceHamper;
         }
 
         [HttpGet]
@@ -24,21 +28,91 @@ namespace myProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCategory (CategoryAddCategoryViewModel vm)
+        public IActionResult AddCategory(CategoryAddCategoryViewModel vm)
         {
             if (ModelState.IsValid)
             {
-
                 Category cat = new Category
                 {
-                    CategoryId=vm.CategoryId,
                     CategoryName = vm.CategoryName
                 };
-                    _dataService.Create(cat);
-                    return RedirectToAction("Index", "Home");
+
+                _categoryDataService.Create(cat);
+                return RedirectToAction("Index", "Home");
             }
-            //if invalid
+
             return View(vm);
         }
+
+        public IActionResult Details()
+        {
+            IEnumerable<Hamper> hampers = _hamperDataService.GetAll();
+            IEnumerable<Category> cat = _categoryDataService.GetAll();
+
+            CategoryDetailsViewModel vm = new CategoryDetailsViewModel
+            {
+                Hampers = hampers,
+                Categories = cat
+            };
+
+            return View(vm);
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            Category cat = _categoryDataService.GetSingle(c => c.CategoryId == id);
+
+            CategoryEditViewModel vm = new CategoryEditViewModel
+            {
+                 CategoryId = cat.CategoryId,
+                 CategoryName = cat.CategoryName
+
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(CategoryEditViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                //map
+                Category updatedCat = new Category
+                {
+                    CategoryId = vm.CategoryId,
+                    CategoryName = vm.CategoryName
+                };
+                //save
+                _categoryDataService.Update(updatedCat);
+                //go home
+                return RedirectToAction("Index", "Home");
+            }
+            return View(vm);
+        }
+
+        public IActionResult CategoryById(int id)
+        {
+            Category cat = _categoryDataService.GetSingle(c => c.CategoryId == id);
+
+            IEnumerable <Hamper> hamper = _hamperDataService.Query(h => h.CategoryId == id);
+
+            CategoryCategoryByIdViewModel vm = new CategoryCategoryByIdViewModel
+            {
+                CategoryId = cat.CategoryId,
+                Hampers = hamper,
+                CategoryName = cat.CategoryName
+            };
+
+            return View(vm);
+        }
+
+        //public IActionResult Delete(int id)
+        //{
+        //    Category cat = _categoryDataService.GetSingle(c => c.CategoryId == id);
+        //    _categoryDataService.Delete(cat);
+        //    return RedirectToAction("Index", "Home");
+        //}
     }
 }

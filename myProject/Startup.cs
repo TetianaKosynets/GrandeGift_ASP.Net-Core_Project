@@ -35,6 +35,8 @@ namespace myProject
             services.AddMvc().AddSessionStateTempDataProvider();
             services.AddScoped<IDataService<Profile>, DataService<Profile>>();
             services.AddScoped<IDataService<Address>, DataService<Address>>();
+            services.AddScoped<IDataService<Category>, DataService<Category>>();
+            services.AddScoped<IDataService<Hamper>, DataService<Hamper>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

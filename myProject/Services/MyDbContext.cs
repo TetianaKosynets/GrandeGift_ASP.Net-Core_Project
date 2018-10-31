@@ -13,6 +13,7 @@ namespace myProject.Services
         public DbSet<Profile> TblProfile { get; set; }
         public DbSet<Address> TblAddress { get; set; }
         public DbSet<Category> TblCategory { get; set; }
+        public DbSet<Hamper> TblHamper { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder option)
         {

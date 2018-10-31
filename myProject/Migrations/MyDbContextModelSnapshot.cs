@@ -184,7 +184,13 @@ namespace myProject.Migrations
                     b.Property<int>("AddressID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AddressDetails")
+                    b.Property<string>("City");
+
+                    b.Property<string>("PostCode");
+
+                    b.Property<string>("State");
+
+                    b.Property<string>("StreetAddress")
                         .IsRequired();
 
                     b.Property<string>("UserID")
@@ -205,6 +211,26 @@ namespace myProject.Migrations
                     b.HasKey("CategoryId");
 
                     b.ToTable("TblCategory");
+                });
+
+            modelBuilder.Entity("myProject.Models.Hamper", b =>
+                {
+                    b.Property<int>("HamperId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CategoryId");
+
+                    b.Property<string>("Details");
+
+                    b.Property<string>("HamperName");
+
+                    b.Property<double>("Price");
+
+                    b.HasKey("HamperId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("TblHamper");
                 });
 
             modelBuilder.Entity("myProject.Models.Profile", b =>
@@ -268,6 +294,14 @@ namespace myProject.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("myProject.Models.Hamper", b =>
+                {
+                    b.HasOne("myProject.Models.Category")
+                        .WithMany("Hampers")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

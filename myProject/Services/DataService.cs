@@ -52,5 +52,10 @@ namespace myProject.Services
             _context.SaveChanges();
         }
 
+        //public bool Exist(Func<T, bool> predicate)
+        //{
+        //    return true;
+        //}
+
     }
 }

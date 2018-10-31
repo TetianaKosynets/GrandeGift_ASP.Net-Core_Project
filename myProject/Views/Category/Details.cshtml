@@ -1,0 +1,30 @@
+﻿@model CategoryDetailsViewModel
+
+<h2>All Categories</h2>
+
+@foreach (var item in Model.Categories)
+{
+    @Html.ActionLink(item.CategoryName, "categoryById", "Category", new { id = item.CategoryId })
+    @if (User.Identity.Name == "admin@grandegift.com")
+    {
+        @Html.ActionLink("Edit", "Edit", "Category", new { id = item.CategoryId })
+        @*@Html.ActionLink("Delete", "Delete", "Category", new { id = item.CategoryId })*@
+    }
+
+    <ul>
+        @foreach (var i in Model.Hampers)
+        {
+            <li>@i.HamperName</li>
+            @if (User.Identity.Name == "admin@grandegift.com")
+            {
+                @Html.ActionLink("Edit ", "Edit", "Hamper", new { id = i.HamperId })
+                @Html.ActionLink("Delete", "Delete", "Hamper", new { id = i.HamperId })
+            }
+
+        }
+        @if (User.Identity.Name == "admin@grandegift.com")
+        {
+            @Html.ActionLink("Add new Hamper", "Add", "Hamper")
+        }
+    </ul>
+}

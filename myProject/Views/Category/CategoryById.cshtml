@@ -1,0 +1,11 @@
+﻿@model CategoryCategoryByIdViewModel
+
+<h2>@Model.CategoryName</h2>
+
+@foreach (var item in Model.Hampers)
+{
+    <ul>
+        <li>@item.HamperName</li>
+        <li>@item.Price</li>
+    </ul>
+}

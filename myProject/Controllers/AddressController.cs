@@ -26,7 +26,7 @@ namespace myProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAddress(AddressAddAddressViewModel vm)
+        public IActionResult AddAddress(AddressAddAddressViewModel vm)
         {
             if (ModelState.IsValid)
             { 

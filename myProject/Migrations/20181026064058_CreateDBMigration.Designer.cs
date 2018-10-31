@@ -11,8 +11,8 @@ using System;
 namespace myProject.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20181025003223_SeedMigration")]
-    partial class SeedMigration
+    [Migration("20181026064058_CreateDBMigration")]
+    partial class CreateDBMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -185,7 +185,13 @@ namespace myProject.Migrations
                     b.Property<int>("AddressID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AddressDetails")
+                    b.Property<string>("City");
+
+                    b.Property<string>("PostCode");
+
+                    b.Property<string>("State");
+
+                    b.Property<string>("StreetAddress")
                         .IsRequired();
 
                     b.Property<string>("UserID")
@@ -194,6 +200,38 @@ namespace myProject.Migrations
                     b.HasKey("AddressID");
 
                     b.ToTable("TblAddress");
+                });
+
+            modelBuilder.Entity("myProject.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CategoryName");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("TblCategory");
+                });
+
+            modelBuilder.Entity("myProject.Models.Hamper", b =>
+                {
+                    b.Property<int>("HamperId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CategoryId");
+
+                    b.Property<string>("Details");
+
+                    b.Property<string>("HamperName");
+
+                    b.Property<double>("Price");
+
+                    b.HasKey("HamperId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Hamper");
                 });
 
             modelBuilder.Entity("myProject.Models.Profile", b =>
@@ -257,6 +295,14 @@ namespace myProject.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("myProject.Models.Hamper", b =>
+                {
+                    b.HasOne("myProject.Models.Category")
+                        .WithMany("Hampers")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

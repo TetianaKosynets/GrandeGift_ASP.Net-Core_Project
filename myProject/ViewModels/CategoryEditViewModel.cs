@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace myProject.ViewModels
 {
-    public class CategoryAddCategoryViewModel
+    public class CategoryEditViewModel
     {
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
     }
 }
