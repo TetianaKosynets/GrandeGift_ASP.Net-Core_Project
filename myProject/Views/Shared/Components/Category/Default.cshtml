@@ -1,0 +1,6 @@
+﻿@model IEnumerable<myProject.Models.Category>
+
+@foreach (var item in Model)
+{
+    <a class="dropdown-item" href="/hamper/details/@item.CategoryId">@item.CategoryName</a>
+}

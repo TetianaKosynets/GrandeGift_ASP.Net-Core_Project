@@ -12,6 +12,7 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
+        //"SQLCONNSTR_DefaultConnection": "Server = (localdb)\\MSSQLLocalDB; Database = GrandeGiftDB; Trusted_Connection = true; MultipleActiveResultSets=true",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },

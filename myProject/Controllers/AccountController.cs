@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using myProject.Models;
@@ -16,14 +17,21 @@ namespace myProject.Controllers
         private IDataService<Address> _dataServiceAddress;
         private SignInManager<IdentityUser> _signInManagerService;
         private RoleManager<IdentityRole> _roleManagerService;
+        private IDataService<Cart> _cartDataService;
+        private IDataService<Hamper> _hamperDataService;
 
         private UserManager<IdentityUser> _userManagerService;
+
+        private MyDbContext _context;
 
         public AccountController(UserManager<IdentityUser> managerService,
                                     SignInManager<IdentityUser> signinService,
                                     RoleManager<IdentityRole> roleService,
                                     IDataService<Profile> serviceProf,
-                                    IDataService<Address> serviceAddress)
+                                    IDataService<Address> serviceAddress,
+                                    IDataService<Cart> cartDataService,
+                                    IDataService<Hamper> hamperDataService,
+                                    MyDbContext context)
         {
             _userManagerService = managerService;
             _signInManagerService = signinService;
@@ -31,6 +39,10 @@ namespace myProject.Controllers
 
             _dataServiceProf = serviceProf;
             _dataServiceAddress = serviceAddress;
+            _cartDataService = cartDataService;
+            _hamperDataService = hamperDataService;
+
+            _context = context;
         }
 
         [HttpGet]
@@ -133,49 +145,81 @@ namespace myProject.Controllers
             string id = _userManagerService.GetUserId(User);
 
             Profile prof = _dataServiceProf.GetSingle(s => s.UserID == id);
-            Address address = _dataServiceAddress.GetSingle(a => a.UserID == id);
+            IEnumerable<Address> address = _dataServiceAddress.GetQuery().Where(a => a.UserID == id);
 
-            AccountUpdateProfileViewModel vm = new AccountUpdateProfileViewModel
-            {
-                UserId = id,
-                Username = name,
-                FirstName = prof.FirstName,
-                LastName = prof.LastName,
-                StreetAddress = address.StreetAddress,
-                City = address.City,
-                State = address.State,
-                PostCode = address.PostCode
+
+
+			AccountUpdateProfileViewModel vm = new AccountUpdateProfileViewModel
+			{
+				UserId = id,
+				Username = name,
+				FirstName = prof.FirstName,
+				LastName = prof.LastName,
+				Addresses = address
             };
+
+            vm.FavouriteAddressId = address.Where(a => a.Favourite == true).Select(a => a.AddressID).FirstOrDefault();
 
             return View(vm);
         }
 
         [HttpPost]
-        public IActionResult UpdateProfile(AccountUpdateProfileViewModel vm)
+        public async Task<IActionResult> UpdateProfile(AccountUpdateProfileViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                //Current UserName
-                string name = User.Identity.Name;
-                //Current UserID
+                string userId = _userManagerService.GetUserId(User);
 
-                string id = _userManagerService.GetUserId(User);
-
-                Profile prof = _dataServiceProf.GetSingle(s => s.UserID == id);
-                Address address = _dataServiceAddress.GetSingle(a => a.UserID == id);
+                Profile prof = _dataServiceProf.GetSingle(s => s.UserID == userId);
 
                 prof.FirstName = vm.FirstName;
                 prof.LastName = vm.LastName;
-                address.StreetAddress = vm.StreetAddress;
-                address.City = vm.City;
-                address.State = vm.State;
-                address.PostCode = vm.PostCode;
 
-                    _dataServiceProf.Update(prof);
-                    _dataServiceAddress.Update(address);
+                Address a = _context.TblAddress.Where(s => s.Favourite == true).FirstOrDefault();
+                a.Favourite = false;
+
+                Address add = _context.TblAddress.Where(s => s.AddressID == vm.FavouriteAddressId).FirstOrDefault();
+                add.Favourite = true;
+
+                await _context.SaveChangesAsync();
+                _dataServiceProf.Update(prof);
                     return RedirectToAction("Index", "Home");
             }
             //if invalid
+            return View(vm);
+        }
+
+        [HttpGet]
+        public IActionResult GuestDetails()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult GuestDetails(AccountGuestDetailsViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                Profile prof = new Profile
+                {
+                    FirstName = vm.FirstName,
+                    LastName = vm.LastName,
+                    UserID = "guest" + HttpContext.Session.Id
+            };
+
+                Address addressDetails = new Address
+                {
+                    UserID = "guest" + HttpContext.Session.Id,
+                    StreetAddress = vm.StreetAddress,
+                    City = vm.City,
+                    State = vm.State,
+                    PostCode = vm.PostCode
+                };
+
+                    _dataServiceProf.Create(prof);
+                    _dataServiceAddress.Create(addressDetails);
+                    return RedirectToAction("Order", "Cart");
+                }
             return View(vm);
         }
     }

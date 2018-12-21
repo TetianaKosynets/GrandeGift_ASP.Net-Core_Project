@@ -12,5 +12,7 @@ namespace myProject.ViewModels
         public string State { get; set; }
         public string City { get; set; }
         public string PostCode { get; set; }
+		public string UserId { get; set; }
+        public bool Favourite { get; set; }
     }
 }

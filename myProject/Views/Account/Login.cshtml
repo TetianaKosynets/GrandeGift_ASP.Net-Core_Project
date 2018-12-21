@@ -1,21 +1,19 @@
 ﻿@model AccountLoginViewModel
-<h2 class="headings">Login</h2>
 
 <div class="container">
     <div class="row">
-        <div class="col-md-3">
-
-        </div>
+        <div class="col-md-3"></div>
         <div class="col-md-6">
             <div>
                 @Html.ValidationSummary()
             </div>
-
             <form asp-controller="Account" asp-action="Login" method="post">
                 <div asp-validation-summary="ModelOnly">
                 </div>
-
-                <div class="mt-2">
+                <div class="ml-5 mr-5 mt-3">
+                    <h2 class="text-center">Login</h2>
+                </div>
+                <div class="mt-3">
                     <input asp-for="UserName" class="form-control" placeholder="Email" />
                     <span asp-validation-for="UserName" class="text-danger" />
                 </div>
@@ -32,6 +30,6 @@
                     <input class="btn" type="submit" value="Login" />
                 </div>
             </form>
+            </div>
+            </div>
         </div>
-    </div>
-</div>

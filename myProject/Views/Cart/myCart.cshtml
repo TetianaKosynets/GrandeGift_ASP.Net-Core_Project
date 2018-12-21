@@ -1,0 +1,99 @@
+﻿@model IEnumerable<CartMyCartViewModel>
+
+    <div>
+        @foreach (var item in Model)
+        {
+            <input asp-for="@item.UserId" hidden="hidden" />
+            <input asp-for="@item.HamperId" hidden="hidden" />
+            <input asp-for="@item.CartId" type="hidden" />
+        }
+    </div>
+    <div class="container-fluid">
+        <div class="ml-5 mr-5 mt-3">
+            <h2 class="text-center">My Cart</h2>
+        </div>
+        @foreach (var item in Model)
+        {
+            <div class="row mt-2 ml-5 mr-5">
+                <div class="col-md-4 mt-4">
+                    <img class="mx-auto d-block" style="max-width:370px; width:100%" src="~/images/@item.FileName">
+                </div>
+                <div class="col-xs-6 pt-4 ml-3">
+                    <h4>@item.HamperName</h4>
+                    <p>Price: $@item.Price</p>
+                    <br />
+
+                    <form asp-action="MyCart" asp-controller="Cart" method="post" asp-route-id="@item.CartId">
+                        <input type="number" asp-for="@item.Qty" name="Qty" />
+                        <span asp-validation-for="@item.Qty" class="text-danger" /> <br />
+                        <input type="submit" value="Update" />
+                    </form>
+                </div>
+            </div>
+        }
+
+        @if (User.Identity.IsAuthenticated)
+        {
+
+            <div class="row  mt-2">
+                <div class="col-md-1"></div>
+                <div class="col-md-5">
+                    <h3 class="mt-3">Posting Address:</h3>
+                    @foreach (var item in Model)
+                    {
+                        @foreach (var i in item.Addresses)
+                        {
+                            <span>@i.StreetAddress</span><br />
+                            <span>@i.City</span><br />
+                            <span>@i.State</span><br />
+                            <span>@i.PostCode</span><br />
+                        }
+                    }
+                </div>
+            </div>
+        }
+        @if (Model.Sum(i => i.Price * i.Qty) == 0)
+        {
+            <div class="row">
+                <div class="ml-3">
+                    <h3>Your Cart is empty</h3>
+                </div>
+            </div>
+            @using (Html.BeginForm("Index", "Home"))
+            {
+                <input class="btn" type="submit" value="Continue Shopping" />
+            }
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-6 ml-3 mt-3">
+                    <h3>Order Total: $@Model.Sum(i => i.Price * i.Qty)</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-6 ml-3 mt-3">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @using (Html.BeginForm("Order", "Cart", FormMethod.Get))
+                        {
+                            <input class="btn" type="submit" value="Submit Order" />
+                        }
+                    }
+                    else
+                    {
+                    @using (Html.BeginForm("GuestDetails", "Account", FormMethod.Get))
+                    {
+                        <input class="btn" type="submit" value="Submit Order" />
+                    }
+                    }
+                    @using (Html.BeginForm("Index", "Home"))
+                    {
+                        <input class="btn mt-3" type="submit" value="Continue Shopping" />
+                    }
+                </div>
+            </div>
+        }
+        </div>

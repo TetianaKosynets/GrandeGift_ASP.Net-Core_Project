@@ -13,9 +13,10 @@ namespace myProject.Models
         public string HamperName { get; set; }
         public string Details { get; set; }
         public double Price { get; set; }
-        //public string ImageName { get; set; }
-        //[DisplayName ("Upload File")]
-        //public string ImagePath { get; set; }
         public int CategoryId { get; set; }
+        public string ContentType { get; set; }
+        public string FileName { get; set; }
+        public byte[] FileContent { get; set; }
+        public long ContentSize { get; set; }
     }
 }

@@ -1,0 +1,52 @@
+﻿@model HamperSearchViewModel
+
+    <form asp-controller="Hamper" asp-action="Search" method="post">
+
+        <div class="container-fluid">
+            <div class="ml-5 mr-5">
+                <h1 class="text-center">Searching for "@Model.SearchHamper"</h1>
+                <input asp-for="SearchHamper" hidden />
+            </div>
+
+            <div class="form-row ml-5">
+                <div class="col-1">
+                    <input type="number" asp-for="searchMin" class="form-control" placeholder="Min" />
+                </div>
+                <div class="col-1">
+                    <input type="number" asp-for="searchMax" class="form-control" placeholder="Max" />
+                </div>
+                <div class="col-2">
+                    <input type="submit" class="btn" value="Search by Price" />
+                </div>
+                @*<div class="col-3">
+                    @using (Html.BeginForm("Search", "Hamper", FormMethod.Post))
+                    {
+                        <div class="col">
+                            @Html.DropDownList("CategoryName", "Choose a Category")
+                        </div>
+                    }
+                    </div>*@
+            @foreach (var item in Model.Hampers)
+            {
+                <div class="row mt-3">
+                    <div class="col-md-1"></div>
+                    <div class="mt-2 col-md-4">
+                        <img class="mx-auto d-block" style="max-width:370px; width:80%" src="~/images/@item.FileName">
+                    </div>
+                    <div class="col-xs-6 pt-4 ml-4">
+                        <h2>@item.HamperName</h2>
+                        <h5>Price: $@item.Price</h5>
+                        @Html.ActionLink("Details ", "id", "Hamper", new { id = item.HamperId })
+
+                        @if (User.Identity.Name == "admin@grandegift.com")
+                        {
+                            <br />
+                            @Html.ActionLink("Edit ", "Edit", "Hamper", new { id = item.HamperId })
+                            @Html.ActionLink("Delete", "Delete", "Hamper", new { id = item.HamperId })
+                        }
+                    </div>
+                </div>
+            }
+                </div>
+            </div>
+</form>

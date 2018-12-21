@@ -1,0 +1,43 @@
+﻿@model HamperEditViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div>
+                @Html.ValidationSummary()
+            </div>
+            <form asp-controller="Hamper" asp-action="Edit" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly">
+                </div>
+                <div class="ml-5 mr-5 mt-3">
+                    <h2 class="text-center">Edit @Model.HamperName</h2>
+                </div>
+                <div>
+                    <input asp-for="HamperId" hidden="hidden" />
+                    <input asp-for="CategoryId" type="hidden" />
+                </div>
+                <div class="mt-2">
+                    <input asp-for="HamperName" class="form-control" placeholder="Hamper Name" />
+                    <span asp-validation-for="HamperName" class="text-danger" />
+                </div>
+                <div class="mt-2">
+                    <textarea asp-for="Details" class="form-control" placeholder="Details"></textarea>
+                    <span asp-validation-for="Details" class="text-danger" />
+                </div>
+                <div class="mt-2">
+                    <input asp-for="Price" class="form-control" placeholder="Price" />
+                    <span asp-validation-for="Price" class="text-danger" />
+                </div>
+                <div class="mt-2">
+                    <label>Upload Image</label>
+                    <input type="file" name="upload" />
+                </div>
+
+                <div>
+                    <input type="submit" value="Save Changes" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

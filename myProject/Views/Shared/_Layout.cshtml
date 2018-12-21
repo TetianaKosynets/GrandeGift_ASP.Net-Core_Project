@@ -1,6 +1,4 @@
-﻿@*@model CategoryDetailsViewModel*@
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html>
 <head>
@@ -30,29 +28,32 @@
                 <ul class="navbar-nav mr-auto navText">
                     <li class="nav-item active mr-3">
                         <a class="nav-link" href="/home/index">
-                            Home
+                            GRANDE GIFT
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
                     <li class="nav-item mr-2 dropdown">
-                        @if (User.Identity.Name == "admin@grandegift.com")
-                        {
-                            <a class="nav-link dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">Categories</a>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item" href="/category/details">View all Categories</a>
+                        <a class="nav-link dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">Categories</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            @await Component.InvokeAsync("Category")
+                            @if (User.Identity.Name == "admin@grandegift.com")
+                            {
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="/category/details">Manage Categories</a>
                                 <a class="dropdown-item" href="/category/AddCategory">Add new Category</a>
-                            </div>
-                        }
-                        else
-                        { 
-                            <a class="nav-link" href="/category/details">Categories</a>
-                        }
-                        </li>
+                            }
+                            else
+                            {
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="/Cart/myCart">My Cart</a>
+                            }
+                        </div>
+                    </li>
                     <li class="nav-item mr-3">
-                        <a class="nav-link" href="#">Contact</a>
+                        <a class="nav-link" href="/home/contact">Contact</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
+                        <a class="nav-link" href="/home/about">About</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav mr-12 text">
@@ -64,7 +65,7 @@
                                 <a class="dropdown-item" href="/account/updateProfile">My Profile</a>
                                 <a class="dropdown-item" href="/address/AddAddress">Add new address</a>
                                 <a class="dropdown-item" href="#">Change Password</a>
-                                <a class="dropdown-item" href="#">Cart</a>
+                                <a class="dropdown-item" href="/Cart/myCart">My Cart</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="/account/logout">Logout</a>
                             </div>
@@ -80,14 +81,15 @@
                         </li>
                     }
                 </ul>
-                </div>
+            </div>
         </div>
     </nav>
     <div class="container-fluid">
         <div class="row">
             <div class="ml-md-auto">
-                <form class="form-inline">
-                    <input type="text" class="form-control" id="search" placeholder="Search for..." />
+                <form asp-controller="Hamper" asp-action="Search" method="get" class="form-inline">
+                    <input name="search" type="text" class="form-control" id="search" placeholder="Search for hamper..." />
+
                     <button class="btn btn-primary" id="b_search">
                         <img style="width:20px" src="~/images/search.png" />
                     </button>
@@ -95,7 +97,8 @@
             </div>
         </div>
     </div>
-    <div>
+
+    <div class="mb-5">
         @RenderBody()
     </div>
 

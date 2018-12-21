@@ -13,9 +13,9 @@ namespace myProject.Services
         private DbSet<T> _dbSet;
 
         //constructor
-        public DataService()
+        public DataService(MyDbContext myContext)
         {
-            _context = new MyDbContext();
+            _context = myContext;
             _dbSet = _context.Set<T>();
         }
 
@@ -45,6 +45,11 @@ namespace myProject.Services
         {
             return _context.Set<T>().Where(predicate);
         }
+
+		public IQueryable<T> GetQuery()
+		{
+			return _dbSet;
+		}
 
         public void Update(T entity)
         {

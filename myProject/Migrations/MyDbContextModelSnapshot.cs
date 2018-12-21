@@ -186,19 +186,41 @@ namespace myProject.Migrations
 
                     b.Property<string>("City");
 
+                    b.Property<bool>("Favourite");
+
                     b.Property<string>("PostCode");
+
+                    b.Property<int?>("ProfileID");
 
                     b.Property<string>("State");
 
-                    b.Property<string>("StreetAddress")
-                        .IsRequired();
+                    b.Property<string>("StreetAddress");
 
-                    b.Property<string>("UserID")
-                        .IsRequired();
+                    b.Property<string>("UserID");
 
                     b.HasKey("AddressID");
 
+                    b.HasIndex("ProfileID");
+
                     b.ToTable("TblAddress");
+                });
+
+            modelBuilder.Entity("myProject.Models.Cart", b =>
+                {
+                    b.Property<int>("CartId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("HamperId");
+
+                    b.Property<int>("Qty");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("CartId");
+
+                    b.HasIndex("HamperId");
+
+                    b.ToTable("TblCart");
                 });
 
             modelBuilder.Entity("myProject.Models.Category", b =>
@@ -220,7 +242,15 @@ namespace myProject.Migrations
 
                     b.Property<int>("CategoryId");
 
+                    b.Property<long>("ContentSize");
+
+                    b.Property<string>("ContentType");
+
                     b.Property<string>("Details");
+
+                    b.Property<byte[]>("FileContent");
+
+                    b.Property<string>("FileName");
 
                     b.Property<string>("HamperName");
 
@@ -294,6 +324,21 @@ namespace myProject.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("myProject.Models.Address", b =>
+                {
+                    b.HasOne("myProject.Models.Profile")
+                        .WithMany("Addresses")
+                        .HasForeignKey("ProfileID");
+                });
+
+            modelBuilder.Entity("myProject.Models.Cart", b =>
+                {
+                    b.HasOne("myProject.Models.Hamper", "Hamper")
+                        .WithMany()
+                        .HasForeignKey("HamperId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

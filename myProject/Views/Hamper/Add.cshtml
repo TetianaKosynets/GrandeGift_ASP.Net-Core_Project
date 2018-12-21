@@ -1,27 +1,31 @@
 ﻿@model HamperAddViewModel
 
-<h2>Add</h2>
-
 <div class="container">
     <div class="row">
-        <div class="col-md-3">
-
-        </div>
+        <div class="col-md-3"></div>
         <div class="col-md-6">
             <div>
                 @Html.ValidationSummary()
             </div>
-
-            <form asp-controller="Hamper" asp-action="Add" method="post">
+            <form asp-controller="Hamper" asp-action="Add" method="post" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly">
                 </div>
-
+                <div class="ml-5 mr-5">
+                    <h2 class="text-center">Add new Hamper</h2>
+                </div>
+                <div class="mt-2">
+                    <input asp-for="HamperId" hidden="hidden" />
+                </div>
+                <div class="mt-2">
+                    <input asp-for="CategoryId" type="hidden" />
+                    <label asp-for="CategoryName">Category Name: @Model.CategoryName</label>
+                </div>
                 <div class="mt-2">
                     <input asp-for="HamperName" class="form-control" placeholder="Hamper Name" />
                     <span asp-validation-for="HamperName" class="text-danger" />
                 </div>
                 <div class="mt-2">
-                    <textarea asp-for="Details" class="form-control" placeholder="Details"></textarea>
+                    <textarea asp-for="Details" class="form-control" placeholder="Details" cols="40" rows="7"></textarea>
                     <span asp-validation-for="Details" class="text-danger" />
                 </div>
                 <div class="mt-2">
@@ -29,10 +33,16 @@
                     <span asp-validation-for="Price" class="text-danger" />
                 </div>
                 <div class="mt-2">
-                    <input type="file" />
+                    <label>Upload Image</label>
+                    <input type="file" name="upload" />
                 </div>
+
                 <div class="mt-2">
-                    <input class="btn" type="submit" value="Register" />
+                    <input class="btn" type="submit" value="Save" />
+                    @using (Html.BeginForm("Details", "Category"))
+                    {
+                        <input class="btn" type="button" value="Cancel" />
+                    }
                 </div>
             </form>
         </div>

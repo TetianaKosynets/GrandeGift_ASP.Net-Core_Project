@@ -1,21 +1,21 @@
-﻿@model AccountAddAddressViewModel
-
-<h2>AddAddress</h2>
+﻿@model AddressAddAddressViewModel
 
 <div class="container">
     <div class="row">
-        <div class="col-md-3">
-
-        </div>
+        <div class="col-md-3"></div>
         <div class="col-md-6">
             <div>
                 @Html.ValidationSummary()
             </div>
-
-            <form asp-controller="Account" asp-action="AddAddress" method="post">
+            <form asp-controller="Address" asp-action="AddAddress" method="post">
                 <div asp-validation-summary="ModelOnly">
                 </div>
-
+                <div class="ml-5 mr-5 mt-3">
+                    <h2 class="text-center">Add Address</h2>
+                </div>
+                <div class="mt-2">
+                    <input asp-for="UserId" hidden="hidden" />
+                </div>
                 <div class="mt-2">
                     <input asp-for="StreetAddress" class="form-control" placeholder="Street Address" />
                     <span asp-validation-for="StreetAddress" class="text-danger" />
@@ -34,6 +34,10 @@
                 </div>
                 <div class="mt-2">
                     <input class="btn" type="submit" value="Save" />
+                    @using (Html.BeginForm("Index", "Home"))
+                    {
+                        <input class="btn" type="submit" value="Cancel" />
+                    }
                 </div>
             </form>
         </div>

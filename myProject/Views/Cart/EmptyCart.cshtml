@@ -1,0 +1,11 @@
+﻿@model IEnumerable<CartMyCartViewModel>
+
+<div class="container-fluid">
+    <div class="ml-5 mr-5 mt-4">
+        <h2 class="text-center">Your Cart is empty</h2>
+    </div>
+    @using (Html.BeginForm("Index", "Home"))
+    {
+        <input class="btn" type="submit" value="Continue Shopping" />
+    }
+</div>

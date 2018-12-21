@@ -15,5 +15,6 @@ namespace myProject.Models
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
-    }
+		public ICollection<Address> Addresses { get; set; }
+	}
 }

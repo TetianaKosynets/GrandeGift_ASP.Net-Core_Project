@@ -38,12 +38,12 @@ namespace myProject.Controllers
                 };
 
                 _categoryDataService.Create(cat);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Details", "Category");
             }
 
             return View(vm);
         }
-
+        [HttpGet]
         public IActionResult Details()
         {
             IEnumerable<Hamper> hampers = _hamperDataService.GetAll();
@@ -87,32 +87,16 @@ namespace myProject.Controllers
                 //save
                 _categoryDataService.Update(updatedCat);
                 //go home
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Details", "Category");
             }
             return View(vm);
         }
 
-        public IActionResult CategoryById(int id)
+        public IActionResult Delete(int id)
         {
             Category cat = _categoryDataService.GetSingle(c => c.CategoryId == id);
-
-            IEnumerable <Hamper> hamper = _hamperDataService.Query(h => h.CategoryId == id);
-
-            CategoryCategoryByIdViewModel vm = new CategoryCategoryByIdViewModel
-            {
-                CategoryId = cat.CategoryId,
-                Hampers = hamper,
-                CategoryName = cat.CategoryName
-            };
-
-            return View(vm);
+            _categoryDataService.Delete(cat);
+            return RedirectToAction("Details", "Category");
         }
-
-        //public IActionResult Delete(int id)
-        //{
-        //    Category cat = _categoryDataService.GetSingle(c => c.CategoryId == id);
-        //    _categoryDataService.Delete(cat);
-        //    return RedirectToAction("Index", "Home");
-        //}
     }
 }

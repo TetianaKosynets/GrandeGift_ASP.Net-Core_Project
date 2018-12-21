@@ -8,11 +8,11 @@ namespace myProject.ViewModels
 {
     public class HamperAddViewModel
     {
-        public string HamperName { get; set; }
+		public int HamperId { get; set; }
+		public string HamperName { get; set; }
         public string Details { get; set; }
         public double Price { get; set; }
-        //public string ImageName { get; set; }
-        //public string ImagePath { get; set; }
         public int CategoryId { get; set; }
-    }
+        public string CategoryName { get; set; }
+	}
 }

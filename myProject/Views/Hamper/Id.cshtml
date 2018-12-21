@@ -1,0 +1,33 @@
+﻿@model HamperIdViewModel
+<form asp-controller="Hamper" asp-action="Id" asp-route-id="@Model.HamperId" method="post">
+    <div asp-validation-summary="ModelOnly">
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-7 mt-3 mb-2">
+                <h2>@Model.HamperName</h2>
+            </div>
+        </div>
+        <div class="row mt-2 ml-5 mr-5">
+            <div class="col-md-4 mt-4">
+                <img class="mx-auto d-block" style="max-width:370px; width:100%" src="~/images/@Model.FileName">
+            </div>
+            <div class="col-md-6 ml-5">
+                <h5 class="mb-2">Hamper Content:</h5>
+                <textarea class="area form-control mb-3" id="exampleTextarea" disabled rows="7">@Model.Details</textarea>
+                <br />
+                <h4>Price: $@Model.Price</h4>
+                @if (User.Identity.Name == "admin@grandegift.com")
+                {
+                    @Html.ActionLink("Edit ", "Edit", "Hamper", new { id = Model.HamperId })
+                    @Html.ActionLink("Delete", "Delete", "Hamper", new { id = Model.HamperId })
+                }
+                <input type="number"  name="Qty" id="Qty" value="@Model.Qty" class="text-center" /><br />
+                <input class="btn" type="submit" value="Add to Cart" />
+                <br /><br />
+                @Html.ActionLink("Back", "Details", "Hamper", new { id = Model.CategoryId })
+            </div>
+        </div>
+    </div>
+</form>

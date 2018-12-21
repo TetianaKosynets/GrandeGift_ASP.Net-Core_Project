@@ -14,5 +14,7 @@ namespace myProject.Services
         IEnumerable<T> Query(Func<T, bool> predicate);
         void Update(T entity);
         void Delete(T entity);
-    }
+		IQueryable<T> GetQuery();
+
+	}
 }

@@ -1,18 +1,35 @@
 ﻿@model CategoryEditViewModel
 
-<h2>Edit</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div>
+                @Html.ValidationSummary()
+            </div>
+            <form asp-controller="Category" asp-action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly">
+                </div>
+                <div class="ml-5 mr-5 mt-3">
+                    <h2 class="text-center">Edit Category</h2>
+                </div>
+                <div class="mt-2">
+                    <input asp-for="CategoryId" hidden="hidden" />
+                </div>
 
-<form asp-action="Edit" asp-controller="Category" method="post">
-    <div>
-        <input asp-for="CategoryId" hidden="hidden" />
-    </div>
+                <div class="mt-2">
+                    <label asp-for="CategoryName"></label>
+                    <input asp-for="CategoryName" />
+                </div>
 
-    <div>
-        <label asp-for="CategoryName"></label>
-        <input asp-for="CategoryName" />
-    </div>
-
-    <div>
-        <input type="submit" value="Save Changes" />
-    </div>
-</form>
+                <div class="mt-2">
+                    <input type="submit" value="Save Changes" />
+                    @using (Html.BeginForm("Details", "Category"))
+                    {
+                        <input class="btn" type="submit" value="Cancel" />
+                    }
+                </div>
+            </form>
+        </div>
+        </div>
+</div>

@@ -1,21 +1,18 @@
 ﻿@model AccountUpdateProfileViewModel
 
-<h2 class="headings">UpdateProfile</h2>
-
 <div class="container">
     <div class="row">
-        <div class="col-md-3">
-
-        </div>
+        <div class="col-md-3"></div>
         <div class="col-md-6">
             <div>
                 @Html.ValidationSummary()
             </div>
-
             <form asp-controller="Account" asp-action="UpdateProfile" method="post">
                 <div asp-validation-summary="ModelOnly">
                 </div>
-
+                <div class="ml-5 mr-5 mt-3">
+                    <h2 class="text-center">Update Profile</h2>
+                </div>
                 <div class="mt-2">
                     <input asp-for="Username" class="form-control" placeholder="Email" />
                     <span asp-validation-for="Username" class="text-danger" />
@@ -28,22 +25,29 @@
                     <input asp-for="LastName" class="form-control" placeholder="Last Name" />
                     <span asp-validation-for="LastName" class="text-danger" />
                 </div>
-                <div class="mt-2">
-                    <input asp-for="StreetAddress" class="form-control" placeholder="Street Address" />
-                    <span asp-validation-for="StreetAddress" class="text-danger" />
-                </div>
-                <div class="mt-2">
-                    <input asp-for="City" class="form-control" placeholder="City" />
-                    <span asp-validation-for="City" class="text-danger" />
-                </div>
-                <div class="mt-2">
-                    <input asp-for="State" class="form-control" placeholder="State" />
-                    <span asp-validation-for="State" class="text-danger" />
-                </div>
-                <div class="mt-2">
-                    <input asp-for="PostCode" class="form-control" placeholder="Post Code" />
-                    <span asp-validation-for="PostCode" class="text-danger" />
-                </div>
+                @if (Model.Addresses != null)
+                {
+                    <div class="mt-2">
+                        <span>Favourite Delivery Address</span>
+                    </div>
+                    <div class="mt-2" id="radios">
+                        @foreach (var item in Model.Addresses)
+                        {
+                                <br /><input type="radio" asp-for="FavouriteAddressId" value="@item.AddressID" />
+                                <label asp-for="@item.StreetAddress">@item.StreetAddress</label><br />
+                                <label asp-for="@item.City">@item.City</label><br />
+                                <label asp-for="@item.State">@item.State</label><br />
+                                <label asp-for="@item.PostCode">@item.PostCode</label><br />
+                                @Html.ActionLink("Delete", "Delete", "Address")
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="mt-2">
+                        @Html.ActionLink("Add new address", "AddAddress", "Address")
+                    </div>
+                }
                 <div class="mt-2">
                     <input class="btn" type="submit" value="Save Changes" />
                 </div>

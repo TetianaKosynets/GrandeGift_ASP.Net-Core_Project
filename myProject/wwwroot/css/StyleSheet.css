@@ -7,8 +7,18 @@
     font-weight: bold;
 }
 
+.im {
+    height: 320px;
+}
+
 .text {
     font-size: 21px;
+}
+
+a.classname {
+    display: block;
+    width: 150px;
+    height: 150px;
 }
 
 #mainNav {
@@ -40,12 +50,16 @@ footer {
     width:72px;
 }
 
-img{
-    max-height: 400px;
+textarea {
+    background-color:white;
 }
 
-.card {
- height:580px;
+.area {
+    background-color: white;
+}
+
+.card-footer {
+    justify-content:center;
 }
 
 @media (min-width: 992px) {

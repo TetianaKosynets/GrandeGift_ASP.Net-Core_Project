@@ -10,5 +10,6 @@ namespace myProject.ViewModels
     {
         public IEnumerable<Category> Categories { get; set; }
         public IEnumerable<Hamper> Hampers { get; set; }
+
     }
 }

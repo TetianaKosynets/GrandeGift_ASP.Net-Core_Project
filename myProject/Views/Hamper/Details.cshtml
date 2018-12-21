@@ -1,0 +1,46 @@
+﻿@model HamperDetailsViewModel
+
+<div class="container-fluid">
+    <p class="ml-5 mr-5 mt-3">
+        <h2 class="text-center">@Model.CategoryName</h2>
+    </p>
+    @if (User.Identity.Name == "admin@grandegift.com")
+    {
+        <p class="text-center">@Html.ActionLink("Add new Hamper", "Add", "Hamper", new { id = Model.CategoryId })</p>
+    }
+    <form asp-controller="Hamper" asp-action="Details" method="post" asp-route-id="@Model.CategoryId">
+        <div class="form-row ml-5">
+            <div class="col-1">
+                <input type="number" asp-for="searchMin" class="form-control" placeholder="Min" />
+            </div>
+            <div class="col-1">
+                <input type="number" asp-for="searchMax" class="form-control" placeholder="Max" />
+            </div>
+            <div class="col-2">
+                <input type="submit" class="btn" value="Search by Price" />
+            </div>
+        </div>
+
+        @foreach (var item in Model.Hampers)
+        {
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="mt-2 col-md-3">
+                    <img class="mx-auto d-block" style="max-width:270px; width:100%" src="~/images/@item.FileName" alt="@item.HamperName">
+                </div>
+                <div class="col-md-5 pt-4 ml-3">
+                    <h3>@item.HamperName</h3>
+                    <h5>Price: $@item.Price</h5>
+                    @Html.ActionLink("Details ", "id", "Hamper", new { id = item.HamperId })
+
+                    @if (User.Identity.Name == "admin@grandegift.com")
+                    {
+                        <br />
+                        @Html.ActionLink("Edit ", "Edit", "Hamper", new { id = item.HamperId })
+                        @Html.ActionLink("Delete", "Delete", "Hamper", new { id = item.HamperId })
+                    }
+                </div>
+            </div>
+        }
+    </form>
+</div>

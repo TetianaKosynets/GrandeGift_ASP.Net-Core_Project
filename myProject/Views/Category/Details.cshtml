@@ -1,30 +1,65 @@
 ﻿@model CategoryDetailsViewModel
 
-<h2>All Categories</h2>
-
-@foreach (var item in Model.Categories)
-{
-    @Html.ActionLink(item.CategoryName, "categoryById", "Category", new { id = item.CategoryId })
-    @if (User.Identity.Name == "admin@grandegift.com")
-    {
-        @Html.ActionLink("Edit", "Edit", "Category", new { id = item.CategoryId })
-        @*@Html.ActionLink("Delete", "Delete", "Category", new { id = item.CategoryId })*@
-    }
-
-    <ul>
-        @foreach (var i in Model.Hampers)
-        {
-            <li>@i.HamperName</li>
-            @if (User.Identity.Name == "admin@grandegift.com")
+<div class="container-fluid">
+    @*<div class="row">
+        <div class="col-md-1"></div>
+        <div class="mt-2 col-md-3">
+            @foreach (var item in Model.Categories)
             {
-                @Html.ActionLink("Edit ", "Edit", "Hamper", new { id = i.HamperId })
-                @Html.ActionLink("Delete", "Delete", "Hamper", new { id = i.HamperId })
-            }
-
-        }
-        @if (User.Identity.Name == "admin@grandegift.com")
-        {
-            @Html.ActionLink("Add new Hamper", "Add", "Hamper")
-        }
-    </ul>
-}
+             <div class="mt-2">
+                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@item.CategoryName</button>
+                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                 @foreach (var i in Model.Hampers)
+                 {
+                     @if (i.CategoryId == item.CategoryId)
+                     {
+                         <li class="dropright">
+                             <a class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">@i.HamperName</a>
+                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                 <a class="dropdown-item" href="/hamper/delete/@i.HamperId">Delete</a>
+                             </div>
+                         </li>
+                      }
+                  }
+               </div>
+            </div>
+             }
+          </div>
+    </div>*@
+        <div class="mt-2">
+            <div>
+                @foreach (var item in Model.Categories)
+                {
+                    <div class="ml-3">
+                        <h3 class="text-center">@item.CategoryName</h3>
+                        @if (User.Identity.Name == "admin@grandegift.com")
+                        {
+                            <div class="row">
+                                <div class="col-md-5"></div><div class="col-md-6">
+                                    @Html.ActionLink("Edit ", "Edit", "Category", new { id = item.CategoryId })
+                                    @*@Html.ActionLink("Delete", "Delete", "Category", new { id = item.CategoryId })*@
+                                    @Html.ActionLink("Add new Hamper", "Add", "Hamper", new { id = item.CategoryId })
+                                </div>
+                            </div>
+                        }
+                    </div>
+                        <div class="ml-5">
+                            <ul>
+                                @foreach (var i in Model.Hampers)
+                                {
+                                    @if (i.CategoryId == item.CategoryId)
+                                    {
+                                        <li><h5>@i.HamperName</h5></li>
+                                        @if (User.Identity.Name == "admin@grandegift.com")
+                                        {
+                                            @Html.ActionLink("Edit ", "Edit", "Hamper", new { id = i.HamperId })
+                                            @Html.ActionLink("Delete", "Delete", "Hamper", new { id = i.HamperId })
+                                        }
+                                    }
+                                }
+                            </ul>
+                        </div>
+                        }
+                </div>
+                </div>
+    </div>
